@@ -156,10 +156,14 @@ module VX_issue #(
     reg [`PERF_CTR_BITS-1:0] perf_lsu_stalls;
     reg [`PERF_CTR_BITS-1:0] perf_csr_stalls;
     reg [`PERF_CTR_BITS-1:0] perf_gpu_stalls;
+    reg [`PERF_CTR_BITS-1:0] perf_active_threads;
 `ifdef EXT_F_ENABLE
     reg [`PERF_CTR_BITS-1:0] perf_fpu_stalls;
 `endif
 
+// active thread use ibuffer_if.tmask
+// ibuffer_if.valid and ibuffer_id.ready
+// total number of active bits in ibuffer_if.tmask
     always @(posedge clk) begin
         if (reset) begin
             perf_ibf_stalls <= 0;
@@ -192,6 +196,16 @@ module VX_issue #(
             end
         end
     end
+    always@(posedge clk) begin
+        if(reset) begin
+            perf_active_threads <= `PERF_CTR_BITS'b0;
+        end
+        else if(ibuffer_if.valid && ibuffer_if.ready) begin
+            for (integer i=0; i < `NUM_THREADS; ++i) begin
+                perf_active_threads <= perf_active_threads + (ibuffer_if.tmask[i] ? `PERF_CTR_BITS'b1 : `PERF_CTR_BITS'b0);
+            end
+        end
+    end
     
     assign perf_issue_if.ibf_stalls = perf_ibf_stalls;
     assign perf_issue_if.scb_stalls = perf_scb_stalls; 
@@ -199,6 +213,7 @@ module VX_issue #(
     assign perf_issue_if.lsu_stalls = perf_lsu_stalls;
     assign perf_issue_if.csr_stalls = perf_csr_stalls;
     assign perf_issue_if.gpu_stalls = perf_gpu_stalls;
+    assign perf_pipeline_if.active_threads = perf_active_threads;
 `ifdef EXT_F_ENABLE
     assign perf_issue_if.fpu_stalls = perf_fpu_stalls;
 `endif
