@@ -14,6 +14,9 @@ module VX_lsu_unit #(
 
     // inputs
     VX_lsu_req_if.slave     lsu_req_if,
+    `ifdef PERF_ENABLE
+    VX_perf_memsys_if     perf_memsys_if,
+    `endif
 
     // outputs
     VX_commit_if.master     ld_commit_if,
