@@ -282,6 +282,7 @@ extern int vx_dump_perf(vx_device_h device, FILE* stream) {
     mem_lat    += mem_lat_per_core;    
 
     uint64_t mem_dup_accesses_per_core = get_csr_64(staging_ptr, CSR_MPM_MEM_DUP);
+    if (num_cores > 1) fprintf(stream, "PERF: core%d: dup_accesses=%lu\n", core_id, dup_accesses);
     dup_accesses += mem_dup_accesses_per_core;
   
   #ifdef EXT_TEX_ENABLE
@@ -332,11 +333,11 @@ extern int vx_dump_perf(vx_device_h device, FILE* stream) {
   fprintf(stream, "PERF: smem bank stalls=%ld (utilization=%d%%)\n", smem_bank_stalls, smem_bank_utilization);
   fprintf(stream, "PERF: memory requests=%ld (reads=%ld, writes=%ld)\n", (mem_reads + mem_writes), mem_reads, mem_writes);
   fprintf(stream, "PERF: memory average latency=%d cycles\n", mem_avg_lat);
+  fprintf(stream, "PERF: memory dup accesses=%d\n", dup_accesses);
 #ifdef EXT_TEX_ENABLE
   int tex_avg_lat = (int)(double(tex_mem_lat) / double(tex_mem_reads));
   fprintf(stream, "PERF: tex memory reads=%ld\n", tex_mem_reads);
   fprintf(stream, "PERF: tex memory latency=%d cycles\n", tex_avg_lat);
-  fprintf(stream, "PERF: memory dup accesses=%d\n", dup_accesses);
 #endif
 #endif
 

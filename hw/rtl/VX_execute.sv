@@ -164,8 +164,8 @@ module VX_execute #(
     `endif
         .lsu_req_if     (lsu_req_if),
         .ld_commit_if   (ld_commit_if),
-        .st_commit_if   (st_commit_if),
-       );
+        .st_commit_if   (st_commit_if)
+   );
 
     VX_csr_unit #(
         .CORE_ID(CORE_ID)
