@@ -18,8 +18,6 @@ interface VX_perf_pipeline_if ();
 `endif
     wire [`PERF_CTR_BITS-1:0]   gpu_stalls;
 
-    wire [`PERF_CTR_BITS-1:0]   dup_accesses;
-
     modport decode (
         output loads,
         output stores,
@@ -35,8 +33,7 @@ interface VX_perf_pipeline_if ();
     `ifdef EXT_F_ENABLE
         output fpu_stalls,
     `endif
-        output gpu_stalls,
-        output dup_accesses
+        output gpu_stalls
     );    
 
     modport slave (
@@ -51,8 +48,7 @@ interface VX_perf_pipeline_if ();
     `ifdef EXT_F_ENABLE
         input fpu_stalls,
     `endif
-        input gpu_stalls,
-        input dup_accesses
+        input gpu_stalls
     );
 
 endinterface

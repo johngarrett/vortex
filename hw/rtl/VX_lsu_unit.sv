@@ -43,9 +43,6 @@ module VX_lsu_unit #(
     wire                          req_is_dup;
     wire                          req_is_prefetch;
     
-    `ifdef PERF_ENABLE
-        reg [`PERF_CTR_BITS-1:0] perf_num_dups;
-    `endif
     wire mbuf_empty;
 
     wire [`NUM_THREADS-1:0][`CACHE_ADDR_TYPE_BITS-1:0] lsu_addr_type, req_addr_type;
@@ -135,27 +132,17 @@ module VX_lsu_unit #(
     wire [`NUM_THREADS-1:0] req_tmask_dup = req_tmask & {{(`NUM_THREADS-1){~req_is_dup}}, 1'b1};
 
     `ifdef PERF_ENABLE
-    integer i;
+    reg [`PERF_CTR_BITS-1:0] dup_access_count;
     always @(posedge clk) begin
         if (reset) begin
-            req_sent_mask <= 0;
-            is_req_start  <= 1;
+            dup_access_count <= 0;
         end
-        else begin
-            // Iterate over each element in req_tmask_dup
-            for (i = 0; i < `NUM_THREADS; i = i + 1) begin
-              // If the i-th bit is not equal to 1, break out of the loop
-              if (req_tmask_dup[i] != 1'b1) begin
-                break;
-              end
-
-              // If we've reached the last element in the array, increment num_dups by 1
-              if (i == `NUM_THREADS-1) begin
-                num_dups = num_dups + 1;
-              end
-            end
+        else if (req_tmask_dup == `NUM_THREADS'b1) begin
+            dup_access_count <= dup_access_count + `PERF_CTR_BITS'd1;
         end
     end
+
+    assign perf_memsys_if.dup_accesses = dup_access_count;
     `endif
 
     wire mbuf_push = ~mbuf_full
@@ -270,9 +257,6 @@ module VX_lsu_unit #(
 
     assign ready_in = req_dep_ready && dcache_req_ready;
 
-    `ifdef PERF_ENABLE
-    assign perf_memsys_if.dup_accesses = perf_num_dups;
-    `endif
 
     // send store commit
 

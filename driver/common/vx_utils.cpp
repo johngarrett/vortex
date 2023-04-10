@@ -281,8 +281,8 @@ extern int vx_dump_perf(vx_device_h device, FILE* stream) {
     mem_writes += mem_writes_per_core;
     mem_lat    += mem_lat_per_core;    
 
-    uint64_t mem_dup_accesses_per_warp  = get_csr_64(staging_ptr, CSR_MPM_MEM_DUP);
-    dup_accesses += mem_dup_accesses_per_warp;
+    uint64_t mem_dup_accesses_per_core = get_csr_64(staging_ptr, CSR_MPM_MEM_DUP);
+    dup_accesses += mem_dup_accesses_per_core;
   
   #ifdef EXT_TEX_ENABLE
     // total reads

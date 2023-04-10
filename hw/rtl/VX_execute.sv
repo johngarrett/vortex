@@ -160,7 +160,10 @@ module VX_execute #(
     `endif
         .lsu_req_if     (lsu_req_if),
         .ld_commit_if   (ld_commit_if),
-        .st_commit_if   (st_commit_if)
+        .st_commit_if   (st_commit_if),
+        `ifdef PERF_ENABLE
+        .perf_memsys_if (perf_memsys_if)
+        `endif
     );
 
     VX_csr_unit #(
