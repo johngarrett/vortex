@@ -151,6 +151,10 @@ module VX_execute #(
         `SCOPE_BIND_VX_execute_lsu_unit
         .clk            (clk),
         .reset          (lsu_reset),
+     `ifdef PERF_ENABLE
+        .perf_memsys_if (perf_memsys_if),
+    `endif
+
     `ifdef EXT_TEX_ENABLE
         .dcache_req_if  (lsu_dcache_req_if),
         .dcache_rsp_if  (lsu_dcache_rsp_if),
@@ -161,10 +165,7 @@ module VX_execute #(
         .lsu_req_if     (lsu_req_if),
         .ld_commit_if   (ld_commit_if),
         .st_commit_if   (st_commit_if),
-        `ifdef PERF_ENABLE
-        .perf_memsys_if (perf_memsys_if)
-        `endif
-    );
+       );
 
     VX_csr_unit #(
         .CORE_ID(CORE_ID)
