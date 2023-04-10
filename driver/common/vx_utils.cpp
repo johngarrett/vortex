@@ -333,7 +333,7 @@ extern int vx_dump_perf(vx_device_h device, FILE* stream) {
   fprintf(stream, "PERF: smem bank stalls=%ld (utilization=%d%%)\n", smem_bank_stalls, smem_bank_utilization);
   fprintf(stream, "PERF: memory requests=%ld (reads=%ld, writes=%ld)\n", (mem_reads + mem_writes), mem_reads, mem_writes);
   fprintf(stream, "PERF: memory average latency=%d cycles\n", mem_avg_lat);
-  fprintf(stream, "PERF: memory dup accesses=%d\n", dup_accesses);
+  fprintf(stream, "PERF: memory dup accesses=%lu\n", dup_accesses);
 #ifdef EXT_TEX_ENABLE
   int tex_avg_lat = (int)(double(tex_mem_lat) / double(tex_mem_reads));
   fprintf(stream, "PERF: tex memory reads=%ld\n", tex_mem_reads);
