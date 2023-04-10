@@ -216,6 +216,9 @@
 `define CSR_MPM_TEX_LAT             12'hB1C     // texture latency
 `define CSR_MPM_TEX_LAT_H           12'hB9C
 
+`define CSR_MPM_MEM_DUP             12'hB1D     // mem dups
+`define CSR_MPM_MEM_DUP_H           12'hB9D     
+
 // Machine Information Registers
 `define CSR_MVENDORID   12'hF11
 `define CSR_MARCHID     12'hF12

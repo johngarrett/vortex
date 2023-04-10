@@ -136,6 +136,7 @@ extern int vx_dump_perf(vx_device_h device, FILE* stream) {
   uint64_t mem_reads = 0;
   uint64_t mem_writes = 0;
   uint64_t mem_lat = 0;
+  uint64_t dup_accesses = 0;
 #ifdef EXT_TEX_ENABLE
   // PERF: texunit
   uint64_t tex_mem_reads = 0;
@@ -279,6 +280,10 @@ extern int vx_dump_perf(vx_device_h device, FILE* stream) {
     mem_reads  += mem_reads_per_core;
     mem_writes += mem_writes_per_core;
     mem_lat    += mem_lat_per_core;    
+
+
+    uint64_t mem_dup_accesses_per_warp  = get_csr_64(staging_ptr, CSR_MPM_MEM_DUP);
+    dup_accesses += mem_dup_accesses_per_warp;
   
   #ifdef EXT_TEX_ENABLE
     // total reads
@@ -332,6 +337,7 @@ extern int vx_dump_perf(vx_device_h device, FILE* stream) {
   int tex_avg_lat = (int)(double(tex_mem_lat) / double(tex_mem_reads));
   fprintf(stream, "PERF: tex memory reads=%ld\n", tex_mem_reads);
   fprintf(stream, "PERF: tex memory latency=%d cycles\n", tex_avg_lat);
+  fprintf(stream, "PERF: memory dup accesses=%d\n", dup_accesses);
 #endif
 #endif
 
