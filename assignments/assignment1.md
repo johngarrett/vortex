@@ -62,4 +62,13 @@ https://github.com/vortexgpgpu/vortex
 # What to submit
 [1] PERF: average number of active threads per cycle for 16, 32, 64, 128 cases.
 
-[2] Screenshots that show your code changes. Alternatively, you can put your github link. 
+[2] Screenshots that show your code changes. Alternatively, you can put your github link.  
+
+# Results
+
+cases | average active threads per cycle
+-|-
+16 | 0.65
+32 | 0.53
+64 | 0.26
+128 | 0.27
